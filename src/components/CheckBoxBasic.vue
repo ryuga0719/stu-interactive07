@@ -4,7 +4,7 @@
       type="checkbox"
       :name="name"
       :value="value"
-      @input="onChange"
+      v-model="model"
       class="form-tick appearance-none bg-white bg-check h-6 w-6 border border-gray-300 rounded-md checked:bg-purple-500 checked:border-transparent focus:outline-none"
     />
     <span v-if="$slots.default" class="text-gray-700 font-normal">
@@ -14,26 +14,34 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed } from "vue";
 interface Props {
   name?: string;
   value?: string;
+  modelValue: string[];
 }
 
 // 初期値
 const props = withDefaults(defineProps<Props>(), {
   name: "",
   value: "",
+  modelValue: () => [],
 });
 
 // emit
 const emit = defineEmits<{
-  (e: "update", selected: string): void;
+  (e: "update:modelValue", checked: string[]): void;
 }>();
 
-const onChange = () => {
-  emit("update", props.value);
-};
+const model = computed({
+  get() {
+    return props.modelValue;
+  },
+
+  set(checked: string[]) {
+    emit("update:modelValue", checked);
+  },
+});
 </script>
 
 <style scoped></style>

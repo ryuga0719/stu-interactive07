@@ -8,18 +8,25 @@
       </h1>
       <!-- form area -->
       <div class="mb-4">
-        <FormBasic placeholder-text="4" @update="getPasswordLength"
+        <FormBasic placeholder-text="4" @update="getPasswordLength" class="mb-4"
           >Set Password length</FormBasic
         >
         <div>
-          <CheckBoxBasic name="test" value="upper" @update="getSelectedValue"
-            >upper</CheckBoxBasic
+          <CheckBoxBasic name="test" value="upper" v-model="checkedList"
+            >大文字: ABC...</CheckBoxBasic
           >
-          <CheckBoxBasic name="test" value="lower" @update="getSelectedValue"
-            >lower</CheckBoxBasic
+          <CheckBoxBasic name="test" value="lower" v-model="checkedList"
+            >小文字: abc...</CheckBoxBasic
+          >
+          <CheckBoxBasic name="test" value="number" v-model="checkedList"
+            >数字: 123...</CheckBoxBasic
+          >
+          <CheckBoxBasic name="test" value="hyphen" v-model="checkedList"
+            >ハイフン: -</CheckBoxBasic
           >
         </div>
         <ButtonBasic @on-click="clickHandler">Create Password</ButtonBasic>
+        {{ checkedList }}
       </div>
 
       <div v-if="passwordList.length > 0">
@@ -49,7 +56,8 @@ const upperList = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const lowerList = "abcdefghijklmnopqrstuvwxyz";
 const hyphen = "-";
 let passwordLength = ref<number>(4);
-let selectedValueList = ref<string[]>([]);
+
+let checkedList = ref<string[]>([]);
 
 // パスワードを生成
 const getPassword = () => {
@@ -76,11 +84,6 @@ const initPasswordList = () => {
 
 const getPasswordLength = (value: string) => {
   passwordLength.value = Number(value);
-};
-
-const getSelectedValue = (value: string) => {
-  selectedValueList.value.push(value);
-  console.log(selectedValueList.value);
 };
 </script>
 
