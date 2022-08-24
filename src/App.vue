@@ -11,18 +11,18 @@
         <FormBasic placeholder-text="4" @update="getPasswordLength" class="mb-4"
           >Set Password length</FormBasic
         >
-        <div>
-          <CheckBoxBasic name="test" value="upper" v-model="checkedList"
-            >大文字: ABC...</CheckBoxBasic
+        <div class="grid grid-cols-2 mb-4">
+          <CheckBoxBasic name="test" value="UPPER_CASE" v-model="checkedList"
+            >大文字(ABC)</CheckBoxBasic
           >
-          <CheckBoxBasic name="test" value="lower" v-model="checkedList"
-            >小文字: abc...</CheckBoxBasic
+          <CheckBoxBasic name="test" value="LOWER_CASE" v-model="checkedList"
+            >小文字(abc)</CheckBoxBasic
           >
-          <CheckBoxBasic name="test" value="number" v-model="checkedList"
-            >数字: 123...</CheckBoxBasic
+          <CheckBoxBasic name="test" value="NUMBER_CASE" v-model="checkedList"
+            >数字(123)</CheckBoxBasic
           >
-          <CheckBoxBasic name="test" value="hyphen" v-model="checkedList"
-            >ハイフン: -</CheckBoxBasic
+          <CheckBoxBasic name="test" value="HYPHEN_CASE" v-model="checkedList"
+            >ハイフン(-)</CheckBoxBasic
           >
         </div>
         <ButtonBasic @on-click="clickHandler">Create Password</ButtonBasic>
@@ -48,40 +48,37 @@ import { ref } from "vue";
 import ButtonBasic from "./components/ButtonBasic.vue";
 import FormBasic from "./components/FormBasic.vue";
 import CheckBoxBasic from "./components/CheckBoxBasic.vue";
+import { getPasswords, unifyTexts } from "./password.composition";
 
+// 生成したパスワードの候補
 let passwordList = ref<string[]>([]);
 
-const numList = "0123456789";
-const upperList = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-const lowerList = "abcdefghijklmnopqrstuvwxyz";
-const hyphen = "-";
+// パスワードの長さ
 let passwordLength = ref<number>(4);
 
+// 生成するパスワードに含む文字列の条件リスト
 let checkedList = ref<string[]>([]);
 
-// パスワードを生成
-const getPassword = () => {
-  let password = "";
-  for (let k = 0; k < 5; k++) {
-    for (let i = 0; i < passwordLength.value; i++) {
-      let randomNumber = Math.floor(Math.random() * numList.length);
-      password += numList.substring(randomNumber, randomNumber + 1);
-    }
-    passwordList.value.push(password);
-    password = "";
-  }
-};
+// パスワードに含む文字列
+let texts = ref<string>("");
 
 // ボタンをクリックした時の処理
 const clickHandler = () => {
+  // パスワード候補の初期化
   initPasswordList();
-  getPassword();
+  // パスワードに含む文字列を生成
+  texts.value = unifyTexts(checkedList.value);
+  console.log(texts.value);
+  // 生成したパスワードを取得
+  passwordList.value = getPasswords(texts.value, passwordLength.value, 5);
 };
 
+// 生成したパスワードの候補を初期化
 const initPasswordList = () => {
   passwordList.value = [];
 };
 
+// フォームからパスワードの長さを取得
 const getPasswordLength = (value: string) => {
   passwordLength.value = Number(value);
 };
