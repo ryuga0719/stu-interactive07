@@ -11,4 +11,16 @@ export const TEXT_PATTERNS = [
   {
     text: "-",
   },
+  {
+    text: "@",
+  },
+  {
+    text: "?",
+  },
+  {
+    text: "!",
+  },
+  {
+    text: "%",
+  },
 ];
