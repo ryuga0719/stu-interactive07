@@ -8,4 +8,4 @@
 
 ## Tech
 
-Vue3, tailwind.
+Vue3, tailwind
